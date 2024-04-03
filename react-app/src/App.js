@@ -1,13 +1,13 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
-import Movie from './features/movie/movie';
+import Travel from './features/travel/travel';
 
 function App() {
   return (
     <Provider store={store}>
     <div>
-      <Movie/>
+      <Travel/>
     </div>
     </Provider>
   );
