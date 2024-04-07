@@ -5,10 +5,11 @@ var app = express();
 const userRouter = require('./routes/user');
 const travelRouter = require('./routes/travel');
 const productRouter = require('./routes/product');
+const verifyToken = require('./middleware/authMiddleware');
 
 app.use(cors())
 app.use(express.json())
-app.use('/api/user', userRouter);
+app.use('/api/user', verifyToken, userRouter);
 app.use('/api/travel', travelRouter);
 app.use('/api/product', productRouter);
 

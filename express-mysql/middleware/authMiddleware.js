@@ -2,15 +2,17 @@ const jwt = require('jsonwebtoken');
 const secret = 'full-stack-2024';
 const mysql = require('mysql2');
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'p@ssw0rd',
-    database: 'travel'
-  });
+const path = [
+    '/login',
+    '/register'
+];
 
 function verifyToken(req, res, next) {
     let token = req.header('Authorization');
+
+    if(path.includes(req.url)){
+        return next();
+    }
 
     if(!token)
      return res.status(401).json({ error: 'Access denied' });

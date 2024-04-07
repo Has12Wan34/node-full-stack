@@ -3,6 +3,8 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Product = require('../models/product');
 
+const verifyToken = require('../middleware/authMiddleware');
+
 mongoose.connect('mongodb://root:p%40ssw0rd@localhost:27017', { 
     useNewUrlParser: true, 
     useUnifiedTopology: true 
@@ -18,7 +20,7 @@ router.post('/product', async function (req, res, next) {
     });
 });
 
-router.get('/products/search', async function (req, res) {
+router.get('/products/search', verifyToken, async function (req, res) {
     const { name } = req.query;
     let query = {};
 
