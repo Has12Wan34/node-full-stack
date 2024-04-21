@@ -5,6 +5,7 @@ import travelReducer from '../features/travel/travelSlice';
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
-    travels: travelReducer
+    travels: travelReducer,
+    travel: travelReducer,
   },
 });
