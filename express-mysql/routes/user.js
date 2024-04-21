@@ -9,14 +9,14 @@ const saltRounds = 10;
 
 var host = 'localhost';
 if(process.env.NODE_ENV === 'production'){
-  host = 'mysql-server'
+    host = 'mysql-1'
 }
 
 const connection = mysql.createConnection({
-    host,
-    user: 'root',
-    password: 'p@ssw0rd',
-    database: 'travel'
+    host: 'mysql-1',
+    user: 'user',
+    password: 'password',
+    database: 'db'
   });
 
 router.post('/register', [

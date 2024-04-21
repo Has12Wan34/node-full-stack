@@ -5,7 +5,12 @@ const Message = require('../models/message');
 
 const verifyToken = require('../middleware/authMiddleware');
 
-mongoose.connect('mongodb://root:p%40ssw0rd@localhost:27017', { 
+var host = 'localhost';
+if(process.env.NODE_ENV === 'production'){
+  host = 'mongodb-1'
+}
+
+mongoose.connect(`mongodb://mongodb-1:27017`, { 
     useNewUrlParser: true, 
     useUnifiedTopology: true 
 })
