@@ -13,7 +13,7 @@ if(process.env.NODE_ENV === 'production'){
 }
 
 const connection = mysql.createConnection({
-    host: 'mysql-1',
+    host: 'mysql',
     user: 'user',
     password: 'password',
     database: 'db'

@@ -10,7 +10,7 @@ if(process.env.NODE_ENV === 'production'){
   host = 'mongodb-1'
 }
 
-mongoose.connect(`mongodb://mongodb-1:27017`, { 
+mongoose.connect(`mongodb://root:password@mongodb:27017/test?authSource=admin`, { 
     useNewUrlParser: true, 
     useUnifiedTopology: true 
 })

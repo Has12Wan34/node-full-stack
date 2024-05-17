@@ -2,19 +2,36 @@ version: '3.9'
 
 services:
   api:
+    container_name: api-sv
+    image: node-app
     build: .
     ports:
       - "5000:5000"
     links:
       - mongodb
       - mysql
+    networks:
+      - mongodb_network
+      - mysql_network
 
   mongodb:
+    container_name: mongodb-sv
+    hostname: mongodb
     image: mongo
     ports:
-      - "27017:27017"
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+      - mongodb-data:/data/db/
+    networks:
+      - mongodb_network
 
   mysql:
+    container_name: mysql-sv
+    hostname: mysql
     image: mysql
     restart: always
     environment:
@@ -24,3 +41,40 @@ services:
       MYSQL_ROOT_PASSWORD: 'password'
     ports:
       - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+    networks:
+      - mysql_network
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
+    networks:
+      - mysql_network
+
+volumes:
+  my-db:
+    driver: local
+    name: my-data
+  mongodb-data:
+    driver: local
+    name: mongo-data
+
+networks:
+  mongodb_network:
+    driver: bridge
+    name: mongo-network
+  mysql_network:
+    driver: bridge
+    name: mysql-network
