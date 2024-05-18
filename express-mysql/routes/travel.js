@@ -1,16 +1,17 @@
 const express = require('express');
+require('dotenv').config();
 const router = express.Router();
 const mysql = require('mysql2');
 
 const verifyToken = require('../middleware/authMiddleware');
 
 var host = 'localhost';
-if(process.env.NODE_ENV === 'production'){
-  host = 'mysql-1'
+if(process.env.NODE_ENV === 'development'){
+  host = 'mysql'
 }
 
 const connection = mysql.createConnection({
-  host: 'mysql',
+  host,
   user: 'user',
   password: 'password',
   database: 'db'

@@ -6,11 +6,11 @@ const Product = require('../models/product');
 const verifyToken = require('../middleware/authMiddleware');
 
 var host = 'localhost';
-if(process.env.NODE_ENV === 'production'){
+if(process.env.NODE_ENV === 'development'){
   host = 'mongodb'
 }
 
-mongoose.connect(`mongodb://root:password@mongodb:27017/test?authSource=admin`, { 
+mongoose.connect(`mongodb://root:password@${host}:27017/test?authSource=admin`, { 
     useNewUrlParser: true, 
     useUnifiedTopology: true 
 })

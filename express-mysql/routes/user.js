@@ -8,12 +8,12 @@ const { body, validationResult } = require('express-validator');
 const saltRounds = 10;
 
 var host = 'localhost';
-if(process.env.NODE_ENV === 'production'){
-    host = 'mysql-1'
+if(process.env.NODE_ENV === 'development'){
+  host = 'mysql'
 }
 
 const connection = mysql.createConnection({
-    host: 'mysql',
+    host,
     user: 'user',
     password: 'password',
     database: 'db'

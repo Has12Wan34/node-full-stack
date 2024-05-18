@@ -5,6 +5,8 @@ services:
     container_name: api-sv
     image: node-app
     build: .
+    restart: always
+    env_file: ./.env.dev
     ports:
       - "5000:5000"
     links:
@@ -18,11 +20,13 @@ services:
     container_name: mongodb-sv
     hostname: mongodb
     image: mongo
+    restart: always
     ports:
       - 27017:27017
+    env_file: ./.env
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=password
+      MONGO_INITDB_ROOT_USERNAME: $MONGO_INITDB_ROOT_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $MONGO_INITDB_ROOT_PASSWORD
     volumes:
       # - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
       - mongodb-data:/data/db/
@@ -34,11 +38,12 @@ services:
     hostname: mysql
     image: mysql
     restart: always
+    env_file: ./.env
     environment:
-      MYSQL_DATABASE: 'db'
-      MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'password'
-      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+      MYSQL_ROOT_PASSWORD: $MYSQL_PASSWORD
     ports:
       - '3306:3306'
     expose:
