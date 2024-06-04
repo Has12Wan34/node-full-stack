@@ -2,6 +2,8 @@ var express = require('express');
 var cors = require('cors');
 const axios = require('axios');
 var app = express();
+const socketIo = require('socket.io');
+const http = require('http');
 
 const userRouter = require('./routes/user');
 const travelRouter = require('./routes/travel');
@@ -10,7 +12,7 @@ const messageRouter = require('./routes/message');
 const verifyToken = require('./middleware/authMiddleware');
 const { body } = require('express-validator');
 
-app.use(cors())
+app.use(cors());
 app.use(express.json())
 app.use('/api/user', verifyToken, userRouter);
 app.use('/api/travel', travelRouter);
@@ -42,6 +44,31 @@ app.post("/webhook", async (req, res) => {
   }
 });
 
-app.listen(5000, function () {
-  console.log('CORS-enabled web server listening on port 80')
-})
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
+  }
+});
+
+io.on('connection', (socket) => {
+  console.log('New client connected');
+
+  socket.on('join', (username) => {
+    io.emit('chat message', `${username} joined the chat`);
+  });
+
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+});
+
+server.listen(5000, () => {
+  console.log('Server is running on port 4000');
+});
