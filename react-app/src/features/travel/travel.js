@@ -1,3 +1,4 @@
+import socketIOClient from 'socket.io-client';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addTravel, editTravel, fetchTravels, fetchSearchTravels, fetchTravelsById, removeTravel, setTravel } from './travelSlice';
@@ -38,6 +39,18 @@ export default function Travel() {
       dispatch(fetchTravels(config));
     }, 500);
   },[]);
+
+  useEffect(() => {
+    const socket = socketIOClient('http://localhost:5000');
+    console.log(formData)
+    // รับข้อความจากเซิร์ฟเวอร์
+    socket.on('reply', (msg) => {
+      console.log(msg)
+    });
+
+    // ปิดการเชื่อมต่อ socket เมื่อ unmount
+    return () => socket.disconnect();
+  }, [formData]);
 
   const handleSearch = (e) => {
     fetchSearchTravel(e.target.value)
@@ -88,6 +101,8 @@ export default function Travel() {
       latitude: '',
       longitude: ''
     }));
+    const socket = socketIOClient('http://localhost:5000');
+    socket.emit('create-travel', formData);
   };
 
   const handleEdit = async (e) => {
