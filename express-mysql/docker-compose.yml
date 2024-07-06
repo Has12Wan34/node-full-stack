@@ -69,6 +69,18 @@ services:
     networks:
       - mysql_network
 
+  postgres:
+    container_name: postgres-sv
+    hostname: mysql
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - postgres_network
+
 volumes:
   my-db:
     driver: local
@@ -76,6 +88,9 @@ volumes:
   mongodb-data:
     driver: local
     name: mongo-data
+  postgres-data:
+    driver: local
+    name: postgres-data
 
 networks:
   mongodb_network:
@@ -84,3 +99,6 @@ networks:
   mysql_network:
     driver: bridge
     name: mysql-network
+  postgres_network:
+    driver: bridge
+    name: postgres-network
